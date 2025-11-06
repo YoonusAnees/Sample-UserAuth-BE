@@ -23,9 +23,28 @@ const corsOptions = {
   credentials: true,
 };
 
+// Use CORS
 app.use(cors(corsOptions));
-app.options('/api/*', cors(corsOptions)); 
+
+// ✅ Handle preflight requests safely (Express v5 compatible)
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (corsOptions.origin.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  res.header("Access-Control-Allow-Methods", corsOptions.methods.join(","));
+  res.header("Access-Control-Allow-Headers", corsOptions.allowedHeaders.join(","));
+  res.header("Access-Control-Allow-Credentials", "true");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
 app.use(express.json());
+
 // Routes
 app.use('/api/auth', authRoutes);
 
@@ -38,7 +57,6 @@ app.get('/', (req, res) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
