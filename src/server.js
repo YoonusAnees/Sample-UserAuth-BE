@@ -13,8 +13,20 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+// --- CORS Options ---
+const corsOptions = {
+  origin: [
+    "*",
+    "http://localhost:5173",
+    "https://sample-userauth-be.onrender.com/api"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+};
+
+// Use CORS middleware (preflight handled automatically)
+app.use(cors(corsOptions));app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
