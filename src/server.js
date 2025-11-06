@@ -13,21 +13,19 @@ connectDB();
 const app = express();
 
 // Middleware
-// --- CORS Options ---
 const corsOptions = {
   origin: [
-    "*",
     "http://localhost:5173",
-    "https://sample-userauth-be.onrender.com/api"
+    "https://sample-user-auth-fe.vercel.app",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
+  credentials: true,
 };
 
-// Use CORS middleware (preflight handled automatically)
-app.use(cors(corsOptions));app.use(express.json());
-
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // ✅ Handle preflight OPTIONS requests
+app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 
