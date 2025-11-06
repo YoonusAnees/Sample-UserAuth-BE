@@ -24,7 +24,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // ✅ Handle preflight OPTIONS requests
+app.options('/api/*', cors(corsOptions)); 
 app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
